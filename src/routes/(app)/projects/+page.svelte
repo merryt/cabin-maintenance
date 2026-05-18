@@ -8,7 +8,8 @@
 	let { data } = $props();
 
 	// Local state for optimistic updates
-	let projects = $state(data.projects);
+	let projects = $state<any[]>([]);
+	projects = data.projects;
 	let editingTodoId = $state<string | null>(null);
 	let editingValue = $state('');
 

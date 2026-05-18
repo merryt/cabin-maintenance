@@ -50,11 +50,11 @@
 </script>
 
 {#if href}
-	<a {href} class={cn(buttonVariants({ variant, size, className }))} {...(rest as any)}>
+	<a {href} class={cn(buttonVariants({ variant, size }), className)} {...(rest as any)}>
 		{@render children?.()}
 	</a>
 {:else}
-	<button class={cn(buttonVariants({ variant, size, className }))} {...(rest as HTMLButtonAttributes)}>
+	<button class={cn(buttonVariants({ variant, size }), className)} {...(rest as HTMLButtonAttributes)}>
 		{@render children?.()}
 	</button>
 {/if}

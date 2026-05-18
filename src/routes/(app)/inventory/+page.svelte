@@ -5,7 +5,16 @@
 	import { Plus, Minus, PackageSearch, Check, MoreVertical, Trash2, Pencil, X } from "lucide-svelte";
 	import { enhance } from "$app/forms";
 
-	let { data } = $props();
+	interface InventoryItem {
+		id: string;
+		item_name: string;
+		notes: string | null;
+		location: string;
+		quantity: number;
+		[key: string]: any;
+	}
+
+	let { data }: { data: { inventory: InventoryItem[] } } = $props();
 
 	let whatWeNeed = $derived(
 		data.inventory.filter((item) => item.quantity <= 0),
@@ -39,7 +48,7 @@
 		}
 	}
 
-	function startEdit(item: any, field: 'item_name' | 'notes' | 'location') {
+	function startEdit(item: InventoryItem, field: 'item_name' | 'notes' | 'location') {
 		editingItemId = item.id;
 		editingFieldName = field;
 		editingValue = item[field] || '';
@@ -53,7 +62,7 @@
 	}
 </script>
 
-{#snippet itemDropdown(item, showLocationOption)}
+{#snippet itemDropdown(item: InventoryItem, showLocationOption: boolean)}
 	{@const isLastNeed = whatWeNeed.length > 0 && whatWeNeed[whatWeNeed.length - 1].id === item.id}
 	{@const isLastHave = whatWeHave.length > 0 && whatWeHave[whatWeHave.length - 1].id === item.id}
 	{@const isLast = isLastNeed || isLastHave}
@@ -68,7 +77,7 @@
 		
 		{#if activeMenuId === item.id}
 			<!-- Backdrop to close the menu on click outside -->
-			<button class="fixed inset-0 h-full w-full cursor-default z-10" onclick={() => activeMenuId = null}></button>
+			<button class="fixed inset-0 h-full w-full cursor-default z-10" aria-label="Close menu" onclick={() => activeMenuId = null}></button>
 			<div class="absolute right-0 w-36 rounded-lg shadow-lg bg-white border border-stone-200 divide-y divide-stone-100 focus:outline-none z-20 overflow-hidden {isLast ? 'bottom-full mb-1' : 'top-full mt-1'}">
 				<div class="py-1">
 					<button 
@@ -116,7 +125,7 @@
 	</div>
 {/snippet}
 
-{#snippet inventoryRowHave(item)}
+{#snippet inventoryRowHave(item: InventoryItem)}
 	{#if editingItemId === item.id && editingFieldName === 'item_name'}
 		<td class="p-4 align-middle font-medium min-w-[180px]">
 			<form method="POST" action="?/updateField" use:enhance={() => {
@@ -226,7 +235,7 @@
 	</td>
 {/snippet}
 
-{#snippet inventoryRowNeed(item)}
+{#snippet inventoryRowNeed(item: InventoryItem)}
 	{#if editingItemId === item.id && editingFieldName === 'item_name'}
 		<td class="p-4 align-middle font-medium min-w-[180px]">
 			<form method="POST" action="?/updateField" use:enhance={() => {
