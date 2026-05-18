@@ -30,6 +30,16 @@ export const actions: Actions = {
 		
 		return { success: true };
 	},
+	markAsNeeded: async ({ request, locals: { supabase } }) => {
+		const formData = await request.formData();
+		const id = formData.get('id') as string;
+
+		if (!id) return fail(400);
+
+		await supabase.from('inventory').update({ quantity: 0 }).eq('id', id);
+
+		return { success: true };
+	},
 	addItem: async ({ request, locals: { supabase } }) => {
 		const formData = await request.formData();
 		const item_name = formData.get('item_name') as string;

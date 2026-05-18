@@ -2,7 +2,7 @@
 	import Table from "$lib/components/ui/Table.svelte";
 	import Button from "$lib/components/ui/button.svelte";
 	import Input from "$lib/components/ui/input.svelte";
-	import { Plus, Minus, PackageSearch, Check, MoreVertical, Trash2, Pencil, X } from "lucide-svelte";
+	import { Plus, Minus, PackageSearch, Check, MoreVertical, Trash2, Pencil, X, ShoppingCart } from "lucide-svelte";
 	import { enhance } from "$app/forms";
 
 	interface InventoryItem {
@@ -105,6 +105,17 @@
 							<Pencil class="mr-2 h-3.5 w-3.5 text-stone-400 group-hover:text-stone-500" />
 							Edit Location
 						</button>
+						<form method="POST" action="?/markAsNeeded" use:enhance class="w-full">
+							<input type="hidden" name="id" value={item.id} />
+							<button 
+								type="submit" 
+								onclick={() => activeMenuId = null}
+								class="group flex items-center px-3 py-1.5 text-xs text-stone-700 hover:bg-stone-50 hover:text-stone-900 w-full text-left border-t border-stone-100/80"
+							>
+								<ShoppingCart class="mr-2 h-3.5 w-3.5 text-stone-400 group-hover:text-stone-500" />
+								We need this
+							</button>
+						</form>
 					{/if}
 				</div>
 				<div class="py-1">
